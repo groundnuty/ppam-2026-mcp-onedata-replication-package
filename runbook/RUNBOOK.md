@@ -20,7 +20,7 @@ The MCP server, the benchmark harness, and the per-trial audit-trail are release
 
 \paragraph{Run commands.} \texttt{make sweep-k8} runs the K=8 sweep across the seven-LLM panel on the eighteen-scenario suite; total wall-time is approximately 7.5~hours. \texttt{make show-grid-rate RID=<run-id>} renders the per-cell grid (the source for Table~\ref{tab:per-cell}); \texttt{make show-headline RID=<run-id>} renders the headline tables.
 
-\paragraph{Test suite.} \texttt{make test} runs 158 unit tests across the MCP server and benchmark harness. The conformance suite~\cite{mcpconformance2026} v0.1.16 reports 2/2 PASS on \texttt{dns-rebinding-protection} after the M-13 transport hardening; it can be re-run via \texttt{make conformance}.
+\paragraph{Test suite.} \texttt{make test} runs 203 unit tests across the MCP server and benchmark harness. The conformance suite~\cite{mcpconformance2026} v0.1.16 reports 2/2 PASS on \texttt{dns-rebinding-protection} after the M-13 transport hardening; it can be re-run via \texttt{make conformance}.
 
 \paragraph{Per-trial data.} The \texttt{artefacts/20260503T002305\_k8/} directory carries the per-(LLM, scenario) trial records (1008 in total), the auto-generated \texttt{REPORT\_paper.md} headline summary, and the per-LLM diagnostic \texttt{REPORT\_cyfronet.md}. Every model failure cited in Section~\ref{sec:findings} resolves to a specific trial record in this directory.
 
