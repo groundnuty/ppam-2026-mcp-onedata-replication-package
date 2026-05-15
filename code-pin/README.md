@@ -43,7 +43,7 @@ git log -1 --pretty='%h  %ad  %s' --date=short
 
 ## Verifying that this commit produced these artefacts
 
-The `run_id` recorded in every line of every `*.jsonl` in [`../artefacts/20260503T002305_k8/`](../artefacts/20260503T002305_k8/) is `20260503T002305_k8`. The sweep that produced it began on **2026-05-03 00:23:05 UTC**, one day before the pinned commit was tagged. The commit batches three things — the rescore protocol, the K=8 driver, and the paper-prep documentation — but the artefacts themselves were materialised one day earlier by a commit reachable from `08e201b`. The driver script at `08e201b` reproduces an equivalent run.
+The `run_id` recorded in every line of every `*.jsonl` in [`../artefacts/20260503T002305_k8/`](../artefacts/20260503T002305_k8/) is `20260503T002305_k8`. The sweep that produced it began on **2026-05-03 00:23:05 UTC**, one day before the pinned commit was tagged. The commit batches three things — the rescore protocol, the n = 8 driver, and the paper-prep documentation — but the artefacts themselves were materialised one day earlier by a commit reachable from `08e201b`. The driver script at `08e201b` reproduces an equivalent run.
 
 ## Where the code went after `08e201b`
 

@@ -1,6 +1,6 @@
-# K=8 headline run artefacts — `20260503T002305_k8`
+# n = 8 headline run artefacts — `20260503T002305_k8`
 
-This directory contains the per-trial audit-trail for the headline `K=8` sweep that produced the **956 / 1008 = 94.8 %** MCP-effectiveness figure reported in the paper.
+This directory contains the per-trial audit-trail for the headline `n = 8` sweep that produced the **956 / 1008 = 94.8 %** MCP-effectiveness figure reported in the paper.
 
 - **Run start:** `2026-05-03 00:23:05 UTC`
 - **Wall-time:** ≈ 7.5 h sequential
@@ -14,7 +14,7 @@ This directory contains the per-trial audit-trail for the headline `K=8` sweep t
 | `<llm>__<scenario>.jsonl`           | 126 | Per-(LLM, scenario) trial records, **as-measured** — one JSON object per trial (8 trials per file) |
 | `<llm>__<scenario>.rescored.jsonl`  | 126 | Same trial set, **with rescore sidecar fields** appended — captures parser-bug lifts and deployment-artefact lifts |
 | `sweep-k8.log`                       | 1   | The full driver log produced by `make sweep-k8` |
-| `_per-step-logs/0N-<llm>.log`        | 9   | One log per panel step (per-LLM K=8 invocation + V4-Pro probe + final report step) |
+| `_per-step-logs/0N-<llm>.log`        | 9   | One log per panel step (per-LLM n = 8 invocation + V4-Pro probe + final report step) |
 
 The 126 = (7 LLMs × 18 scenarios) pairing is exhaustive. The 8 trials per cell are concatenated into a single line-delimited JSON file per cell.
 
@@ -30,7 +30,7 @@ Each line is one trial. The schema is a superset of the as-measured schema: ever
 | `llm_name` | str | One of: `claude-sonnet-4-5`, `gemma-4-31b-it`, `deepseek-v4-pro`, `qwen3.6-35b`, `devstral-2-123b`, `glm-4.7-flash`, `granite-4.1-30b` |
 | `llm_model_id` | str | Concrete pinned id (e.g.\ `claude-sonnet-4-5-20250929`) |
 | `scenario_id` | str | One of `D1`..`D6`, `A1`..`A6`, `P1`..`P6` |
-| `trial_ix` | int | 0..7 within the K=8 sweep |
+| `trial_ix` | int | 0..7 within the n = 8 sweep |
 
 ### Timing fields
 
@@ -108,7 +108,7 @@ make rescore RID=<run-id-printed-by-step-3>
 make show-headline RID=<run-id>
 ```
 
-The artefacts in this directory are the canonical output of steps 3–4 against the live federation on 2026-05-03. Independent reruns will reproduce the panel rate within stochastic K=8 confidence intervals.
+The artefacts in this directory are the canonical output of steps 3–4 against the live federation on 2026-05-03. Independent reruns will reproduce the panel rate within stochastic n = 8 confidence intervals.
 
 ## How the paper cites these artefacts
 

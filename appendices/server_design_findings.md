@@ -45,13 +45,13 @@ The fix returns a structured envelope — `{content, size_bytes, content_type}` 
 
 Onedata accepts arbitrary `key=value` operands in QoS expressions, but the working set is per-federation: this federation has no admin-set storage attributes, so expressions like `country=PL`, `type=ssd`, `geo=EU` that LLMs trained on generic Onedata documentation confidently emit will create rules in permanent `impossible` status.
 
-The fix is a docstring tightening that names the always-safe operands (`providerId`, `storageId`, `anyStorage`), flags the admin-attributed family as federation-specific, and explicitly calls out common fictional operand names to avoid. The K=8 sweep still showed several A5 trials emitting `cloud=EU` (this is capability-gap pattern C-2 in the paper's §5), so the docstring tightening is necessary but not sufficient.
+The fix is a docstring tightening that names the always-safe operands (`providerId`, `storageId`, `anyStorage`), flags the admin-attributed family as federation-specific, and explicitly calls out common fictional operand names to avoid. The n = 8 sweep still showed several A5 trials emitting `cloud=EU` (this is capability-gap pattern C-2 in the paper's §5), so the docstring tightening is necessary but not sufficient.
 
 ### Theme 7 — Transport hardening (M-13, resolved)
 
 The HTTP transport mode of the MCP server originally accepted requests with arbitrary `Host` and `Origin` headers — a DNS-rebinding vulnerability that the `modelcontextprotocol/conformance` suite's `dns-rebinding-protection` scenario detects.
 
-We added FastMCP ASGI middleware that enforces `Host`/`Origin` allow-listing, and the conformance suite now reports **2 / 2 PASS** on the rebinding scenario. The stdio-transport mode used by the K=8 sweep through `claude-agent-sdk` was unaffected (HTTP headers do not apply to the stdio path), but operators running the server via HTTP for Inspector tooling must now apply the middleware fix or remain on the stdio path.
+We added FastMCP ASGI middleware that enforces `Host`/`Origin` allow-listing, and the conformance suite now reports **2 / 2 PASS** on the rebinding scenario. The stdio-transport mode used by the n = 8 sweep through `claude-agent-sdk` was unaffected (HTTP headers do not apply to the stdio path), but operators running the server via HTTP for Inspector tooling must now apply the middleware fix or remain on the stdio path.
 
 ## Cross-references — M-2 and M-9
 

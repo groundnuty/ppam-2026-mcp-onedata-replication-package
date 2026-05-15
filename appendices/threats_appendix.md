@@ -4,11 +4,11 @@ The PPAM proceedings convention has no dedicated Threats section, so this discus
 
 ## 1. Single federation
 
-The K=8 sweep ran on a single Onedata federation (`cloud-pl` + `Cloud-SK`). Results characterise the LLM-agent / federated-namespace interface, not federations of larger size, different geography, or different administrative-domain composition. Results on a 5-provider AT/DE/PL/SK federation, on S3 with IAM, or on POSIX with LDAP may differ. Comparative measurements are left to future work.
+The n = 8 sweep ran on a single Onedata federation (`cloud-pl` + `Cloud-SK`). Results characterise the LLM-agent / federated-namespace interface, not federations of larger size, different geography, or different administrative-domain composition. Results on a 5-provider AT/DE/PL/SK federation, on S3 with IAM, or on POSIX with LDAP may differ. Comparative measurements are left to future work.
 
-## 2. K=8 stochasticity
+## 2. n = 8 stochasticity
 
-At *n* = 8 trials per cell, cell-level Wilson 95 % CI half-widths are bounded above by 0.34. Per-band intervals tighten to 0.13 at *n* = 144 (one band, all seven LLMs); per-LLM all-bands intervals to 0.08 at *n* = 144. The cell-stability decomposition in `stochasticity_appendix.md` surfaces the K=8 stochastic cells explicitly, so readers can identify which (LLM, scenario) cells would benefit from *K* ≥ 16 to stabilise the per-cell estimate.
+At *n* = 8 trials per cell, cell-level Wilson 95 % CI half-widths are bounded above by 0.34. Per-band intervals tighten to 0.13 at *n* = 144 (one band, all seven LLMs); per-LLM all-bands intervals to 0.08 at *n* = 144. The cell-stability decomposition in `stochasticity_appendix.md` surfaces the n = 8 stochastic cells explicitly, so readers can identify which (LLM, scenario) cells would benefit from *n* ≥ 16 to stabilise the per-cell estimate.
 
 ## 3. Closed-model reproducibility
 
@@ -20,4 +20,4 @@ Onedata 25.0's `dbsync` eventual-consistency window introduces millisecond-to-se
 
 ## 5. Tool-call schema bias
 
-The MCP tool schemas were authored against Onedata's REST surface; they reflect what Onedata exposes and what the K=8 sweep needed. Other federations expose different operations (S3 + IAM, POSIX + LDAP, OneFS access zones), and a curated MCP surface for those substrates would have a different shape. The methodology — two-axis OracleResult, federation-reset protocol, multi-LLM panel composition, per-LLM-space architecture — is reusable across substrates; the specific 16-tool curation is not.
+The MCP tool schemas were authored against Onedata's REST surface; they reflect what Onedata exposes and what the n = 8 sweep needed. Other federations expose different operations (S3 + IAM, POSIX + LDAP, OneFS access zones), and a curated MCP surface for those substrates would have a different shape. The methodology — two-axis OracleResult, federation-reset protocol, multi-LLM panel composition, per-LLM-space architecture — is reusable across substrates; the specific 16-tool curation is not.

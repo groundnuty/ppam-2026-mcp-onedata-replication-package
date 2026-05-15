@@ -1,6 +1,8 @@
 # Reproducibility runbook
 
-This runbook contains the full federation-provisioning, model-endpoint, run-command, test-suite, and audit-trail detail needed to reproduce the K=8 headline. The camera-ready paper retains a one-paragraph Reproducibility note before the Acknowledgements; this file is what that note points at.
+This runbook contains the full federation-provisioning, model-endpoint, run-command, test-suite, and audit-trail detail needed to reproduce the `n = 8` headline. The camera-ready paper retains a one-paragraph Reproducibility note before the Acknowledgements; this file is what that note points at.
+
+> **Scope.** This runbook is the **Tier-3** reproduction path (full sweep against a live federation). For Tier-0 (browse the artefacts), Tier-1 (unit tests + conformance, no federation), and Tier-2 (offline rescore against the released artefacts), see the top-level [`../README.md`](../README.md#what-a-reviewer-can-actually-run). Most reviewer questions are answerable at Tier 0 or Tier 1; Tier 3 is required only when re-running the sweep itself.
 
 ## Repository pin
 
@@ -46,7 +48,7 @@ SanoVelo is the vLLM-based open-LLM inference cluster at Sano. PLGrid Forge is C
 ## Run commands
 
 ```bash
-make sweep-k8                              # K=8 sweep, all 7 LLMs × 18 scenarios × 8 trials  (~7.5 h sequential)
+make sweep-k8                              # n = 8 sweep, all 7 LLMs × 18 scenarios × 8 trials  (~7.5 h sequential)
 make show-grid-rate RID=<run-id>           # renders the per-(LLM, scenario) grid
 make show-headline RID=<run-id>            # renders the per-LLM headline counts
 make rescore RID=<run-id>                  # applies the parser-bug + deployment-artefact lifts
@@ -67,7 +69,7 @@ The `artefacts/20260503T002305_k8/` directory in this replication package carrie
 - **126 `<llm>__<scenario>.jsonl`** files — per-(LLM, scenario) trial records, 8 trials each, **1008 total**
 - **126 `<llm>__<scenario>.rescored.jsonl`** files — same trial set, with parser-bug and deployment-artefact lift annotations
 - **`sweep-k8.log`** — full driver log
-- **`_per-step-logs/`** — 9 per-step logs (per-LLM K=8 + V4-Pro probe + final report)
+- **`_per-step-logs/`** — 9 per-step logs (per-LLM n = 8 + V4-Pro probe + final report)
 - **`REPORT_paper.md`** + **`REPORT_cyfronet.md`** — auto-generated headline summaries
 
 Every model failure cited in §5 of the paper resolves to a specific trial record in this directory. The JSONL schema is documented in [`../artefacts/20260503T002305_k8/README.md`](../artefacts/20260503T002305_k8/README.md).

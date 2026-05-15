@@ -6,7 +6,7 @@ This repository is the **replication package** that accompanies the paper
 > *LLM-agentic access to a federated scientific data layer with Onedata.*
 > Proceedings of PPAM 2026.
 
-It contains everything a reader needs to (a) audit any cited empirical claim against the source material, (b) re-run the headline `K = 8` sweep against an equivalent Onedata federation, and (c) inspect any of the 1008 trials individually.
+It contains everything a reader needs to (a) audit any cited empirical claim against the source material, (b) re-run the headline `n = 8` sweep against an equivalent Onedata federation, and (c) inspect any of the 1008 trials individually.
 
 The **server code, benchmark harness, oracles, federation-reset protocol, and rescore tooling** live in a separate repository pinned at a specific commit; this repository contains the **artefacts that commit produced**, the **appendices the paper had to cut** to fit the PPAM 15-page budget, and the **reproducibility runbook** that ties the two together.
 
@@ -22,7 +22,7 @@ ppam-2026-mcp-onedata-replication-package/
 │   ├── scenarios.md                   ← all 18 benchmark scenarios, verbatim briefs + fixtures + pass conditions + fail modes
 │   ├── methodology_appendix.md        ← per-LLM-space architecture, federation-reset 5-phase protocol, oracle tiers, reliability metrics
 │   ├── server_design_findings.md      ← M-1..M-13 server-design issues organised in 7 themes
-│   ├── threats_appendix.md            ← five threats-to-validity paragraphs (single federation, K=8 stochasticity, closed-model reproducibility, eventual consistency, tool-call schema bias)
+│   ├── threats_appendix.md            ← five threats-to-validity paragraphs (single federation, n = 8 stochasticity, closed-model reproducibility, eventual consistency, tool-call schema bias)
 │   ├── stochasticity_appendix.md      ← stable/stochastic cell decomposition + tool-removal feasibility K-counts
 │   ├── positioning_tables.md          ← Tables 1 & 2 (positioning vs the 2025 MCP-benchmark wave) cut from PPAM, slated for the FGCS extension
 │   └── oracle_pseudocode.tex          ← Python verifier archetypes for D1 / A2 / P3 / P4 oracle tiers
@@ -31,10 +31,10 @@ ppam-2026-mcp-onedata-replication-package/
 │   └── RUNBOOK.md                     ← reproducibility runbook: federation provisioning, model endpoints, vLLM launch flags, run commands, test-suite invocation, audit-trail layout
 │
 ├── artefacts/
-│   └── 20260503T002305_k8/            ← the K=8 headline run, 1008 trials
+│   └── 20260503T002305_k8/            ← the n = 8 headline run, 1008 trials
 │       ├── README.md                  ← JSONL schema, rescore protocol summary, paper-trial cross-reference
 │       ├── sweep-k8.log               ← full driver log
-│       ├── _per-step-logs/            ← 9 per-step logs (per-LLM K=8 + V4-Pro probe + report)
+│       ├── _per-step-logs/            ← 9 per-step logs (per-LLM n = 8 + V4-Pro probe + report)
 │       ├── <llm>__<scenario>.jsonl              ← 126 as-measured trial files (1008 trials total)
 │       └── <llm>__<scenario>.rescored.jsonl     ← 126 rescored sidecars with parser-bug + deployment-artefact lift annotations
 │
@@ -43,6 +43,58 @@ ppam-2026-mcp-onedata-replication-package/
                                           `groundnuty/onedata-mcp@ppam2026/14-tools@08e201b`;
                                           this file documents the pin and how to verify it
 ```
+
+## What a reviewer can actually run
+
+Not every claim in the paper requires the full benchmark setup to verify. Four dependency tiers cover what is meaningful to attempt:
+
+| Tier | What you can do                                             | What you need installed              | External resources required                  | Wall-time   |
+|:----:|-------------------------------------------------------------|--------------------------------------|----------------------------------------------|-------------|
+| **0** | Read every appendix, browse the 1008 trial records, run `jq` queries against the JSONL files in this repo, recompute aggregate counts | nothing beyond `git` + `jq`         | none                                         | minutes     |
+| **1** | Run the 203-test suite, run the MCP conformance check (DNS-rebinding 2/2), inspect server source, scenario definitions, oracle code, the rescore script | Python 3.12 + [`uv`](https://docs.astral.sh/uv/) + the MCP-fork clone | none                                         | ~ 15 min    |
+| **2** | Replay the post-clean rescore against the released artefacts (regenerates the `.rescored.jsonl` sidecars from the as-measured `.jsonl` files), verify the 956/1008 = 94.8 % headline, audit each parser-bug and deployment-artefact lift | Tier-1 setup + this replication-package clone | none                                         | ~ 5 min     |
+| **3** | Re-run the headline `n = 8` sweep against a live Onedata federation, including the seven LLM panel | Tier-2 setup                         | live Onedata federation (≥ 2 EU providers, admin token) + endpoints for the 7 panel LLMs (incl. Anthropic API key for the Sonnet leg, OpenRouter / SiliconFlow for V4-Pro, PLGrid Forge for Qwen + GLM, local vLLM cluster for Gemma-4 / Granite-4.1 / Devstral) | ~ 7.5 h     |
+
+**Most reviewer questions are answerable at Tier 0 or Tier 1.** The full Tier-3 reproduction is a substantial undertaking that requires both compute and the closed-model API access; it is not expected of reviewers, and the artefacts in this repo are the canonical reference for the headline numbers regardless.
+
+### Tier 0 quick-start
+
+```bash
+git clone https://github.com/groundnuty/ppam-2026-mcp-onedata-replication-package.git
+cd ppam-2026-mcp-onedata-replication-package
+
+# Confirm the headline figure
+jq -s 'map(select(.outcome_v2 == "PASS")) | length' \
+   artefacts/20260503T002305_k8/*.rescored.jsonl
+# → 956
+
+# Read what each appendix covers
+ls appendices/
+```
+
+### Tier 1 quick-start
+
+```bash
+git clone https://github.com/groundnuty/onedata-mcp.git
+cd onedata-mcp && git checkout 08e201b
+make test           # 203 unit tests, no federation needed
+make conformance    # MCP DNS-rebinding scenario, 2/2 PASS
+```
+
+### Tier 2 quick-start
+
+```bash
+# Tier 1 setup + this replication repo cloned next to it
+cd onedata-mcp
+ln -s ../ppam-2026-mcp-onedata-replication-package/artefacts artefacts
+make rescore RID=20260503T002305_k8
+make show-headline RID=20260503T002305_k8
+make show-grid-rate RID=20260503T002305_k8
+```
+
+### Tier 3 quick-start
+
+See [`runbook/RUNBOOK.md`](runbook/RUNBOOK.md) — the runbook documents the federation provisioning, the seven model endpoints (with their vLLM / OpenAI-compat config), and the `make sweep-k8` driver. Expect to spend setup time on the endpoint configuration; the sweep itself is one command but takes ~ 7.5 h sequential.
 
 ## How to navigate
 
@@ -93,7 +145,7 @@ jq -s 'map(select(.lift_kind=="deployment-artefact")) | length' \
 # → 10
 ```
 
-### "I want to re-run the K=8 sweep"
+### "I want to re-run the n = 8 sweep"
 
 The full procedure — Onedata-federation provisioning, model endpoints, vLLM launch flags, environment variables, harness invocation, and rescore — is in [`runbook/RUNBOOK.md`](runbook/RUNBOOK.md). Approximate cost: an Onedata federation reachable from the harness machine, API keys for any commercial-LLM legs being reproduced, and ≈ 7.5 h of sequential wall-time (or ≈ 1 h if the panel can be parallelised without rate-limit caps).
 

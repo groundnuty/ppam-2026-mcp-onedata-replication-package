@@ -29,4 +29,4 @@ Shorthand:
 |-------------------|----------------------------------------|------------------|-------------------------------------|-------------------------------------|
 | Pan & Chard 2025  | 7 MCP/Globus + ALCF/NERSC              | single domain    | 4 case studies + Recall@k           | position paper + implementations    |
 | Kamatar 2025      | actor model / Globus (no MCP)          | single domain    | microbenchmark + 4 case studies     | federated-compute middleware        |
-| **Ours**          | **16-tool MCP / Onedata**              | **cross-admin**  | **7 LLMs × 18 tasks × K=8**         | **curated MCP + benchmark**         |
+| **Ours**          | **16-tool MCP / Onedata**              | **cross-admin**  | **7 LLMs × 18 tasks × n = 8**         | **curated MCP + benchmark**         |

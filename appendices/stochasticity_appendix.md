@@ -8,7 +8,7 @@ Reliability decomposes by cell-stability. Two LLMs (Sonnet, Gemma-4) have all ei
 
 **Only one cell across the entire 126-pair grid is stable-FAIL: Granite P1.** The agent calls `get_file_distribution` successfully but does not connect the canonical provider-name strings `cloud-pl` and `Cloud-SK` with their EU geography, so the answer reports the per-provider distribution correctly but never names the file as fully replicated to EU providers. This is a model-knowledge gap, not a tool-surface gap, and is dissected in the paper's §5 (capability-gap pattern C-3).
 
-The decomposition makes the K=8 stochasticity visible at cell granularity. A single pass⁸ aggregate would mix cells that flip 7-of-8 with cells that flip 3-of-8.
+The decomposition makes the n = 8 stochasticity visible at cell granularity. A single pass⁸ aggregate would mix cells that flip 7-of-8 with cells that flip 3-of-8.
 
 | Model                     | Stable-PASS | Stable-FAIL | Stochastic |
 |---------------------------|:-----------:|:-----------:|:----------:|
@@ -32,4 +32,4 @@ The curation choices that gave us the 16-tool MCP surface are also testable in t
 | Multi-step access (A1–A6)                       | *K_A* = 3 of 6        | A1, A2, A3 (metadata tagging via file-by-file writes) |
 | Placement-introspection (P1–P6)                 | *K_P* = 0 of 6        | (no agent can reason about replica geography, QoS rules, or transfer history from file CRUD alone) |
 
-These *K*-counts are **pre-registered**: they follow deterministically from the tool-availability constraints and do not depend on which model runs. The full empirical K=8 sweep on the CRUD-only subset, against the headline 16-tool surface, is left to future work where the four-feasible-task budget can be paired with a higher *K* for meaningful statistical power.
+These *K*-counts are **pre-registered**: they follow deterministically from the tool-availability constraints and do not depend on which model runs. The full empirical n = 8 sweep on the CRUD-only subset, against the headline 16-tool surface, is left to future work where the four-feasible-task budget can be paired with a higher *n* for meaningful statistical power.
