@@ -1,28 +1,73 @@
 # Reproducibility runbook
 
-*Cut from §9 Reproducibility. The main paper retains a single-paragraph Reproducibility note before Acknowledgements; this RUNBOOK contains the full federation-provisioning, model-endpoint, run-command, test-suite, and audit-trail detail.*
+This runbook contains the full federation-provisioning, model-endpoint, run-command, test-suite, and audit-trail detail needed to reproduce the K=8 headline. The camera-ready paper retains a one-paragraph Reproducibility note before the Acknowledgements; this file is what that note points at.
 
 ## Repository pin
 
-The MCP server, the benchmark harness, and the per-trial audit-trail are released alongside this paper at `github.com/groundnuty/onedata-mcp` on branch `ppam2026/14-tools` at commit `08e201b`. Reproducing the K=8 headline requires the federation provisioning, the model endpoints, and the run commands below.
+The MCP server, the benchmark harness, and the rescore tooling live in a separate repository pinned at a specific commit:
 
-## Full 5-paragraph reproducibility detail (LaTeX-source verbatim)
+| | |
+|---|---|
+| **Repository** | https://github.com/groundnuty/onedata-mcp |
+| **Branch**     | `ppam2026/14-tools` |
+| **Commit**     | `08e201b` |
 
-```latex
-\section{Reproducibility}
-\label{sec:repro}
+The per-trial audit-trail (1008 trials) is in this replication package at [`../artefacts/20260503T002305_k8/`](../artefacts/20260503T002305_k8/) — see also [`../code-pin/README.md`](../code-pin/README.md) for the rationale behind the two-repository split.
 
-The MCP server, the benchmark harness, and the per-trial audit-trail are released alongside this paper at \texttt{github.com/groundnuty/onedata-mcp} on branch \texttt{ppam2026/14-tools} at commit \texttt{08e201b}. Reproducing the K=8 headline requires the federation provisioning, the model endpoints, and the run commands.
+## Federation provisioning
 
-\paragraph{Federation provisioning.} \texttt{make spaces-create \&\& make spaces-support} provisions the per-LLM Onedata spaces against an existing federation; the SPICE-federation token expiration is documented in the \texttt{.env} template and must be refreshed pre-camera-ready. The fixture SHAs are pinned in the run-id snapshot.
+```bash
+git clone https://github.com/groundnuty/onedata-mcp.git
+cd onedata-mcp && git checkout 08e201b
+cp .env.template .env  # fill in the federation token + endpoints
 
-\paragraph{Model endpoints.} The seven panel LLMs are reachable via three classes of endpoint, all configured via \texttt{.env} template entries. Sonnet runs through the \texttt{claude-agent-sdk} on a local Claude Code session. SanoVelo~\cite{sano2025velo} --- Sano's vLLM-based~\cite{kwon2023vllm} open-LLM inference cluster --- serves Gemma-4 (port 8002 with \texttt{--reasoning-parser gemma4}), Granite-4.1 (port 8003 with \texttt{--reasoning-parser gemma4 --tool-call-parser granite4}), and Devstral (port 8004 with \texttt{max\_tokens=8192}). OpenAI-compatible HTTPS endpoints serve Qwen3.6, GLM-4.7-Flash (Cyfronet PLGrid Forge~\cite{cyfronet2025plgridforge}), and DeepSeek-V4-Pro (OpenRouter $\to$ SiliconFlow).
-
-\paragraph{Run commands.} \texttt{make sweep-k8} runs the K=8 sweep across the seven-LLM panel on the eighteen-scenario suite; total wall-time is approximately 7.5~hours. \texttt{make show-grid-rate RID=<run-id>} renders the per-cell grid (the source for Table~\ref{tab:per-cell}); \texttt{make show-headline RID=<run-id>} renders the headline tables.
-
-\paragraph{Test suite.} \texttt{make test} runs 203 unit tests across the MCP server and benchmark harness. The conformance suite~\cite{mcpconformance2026} v0.1.16 reports 2/2 PASS on \texttt{dns-rebinding-protection} after the M-13 transport hardening; it can be re-run via \texttt{make conformance}.
-
-\paragraph{Per-trial data.} The \texttt{artefacts/20260503T002305\_k8/} directory carries the per-(LLM, scenario) trial records (1008 in total), the auto-generated \texttt{REPORT\_paper.md} headline summary, and the per-LLM diagnostic \texttt{REPORT\_cyfronet.md}. Every model failure cited in Section~\ref{sec:findings} resolves to a specific trial record in this directory.
-
-% ============================================================
+make spaces-create      # one per-LLM Onedata space
+make spaces-support     # provider attach (idempotent)
 ```
+
+The federation-token expiration is documented in the `.env` template and must be refreshed before any rerun. Fixture SHAs are pinned in the run-id snapshot so two reruns against the same fixture produce the same starting state.
+
+## Model endpoints
+
+The seven panel LLMs are reachable through three classes of endpoint, all configured via `.env` entries:
+
+| LLM                       | Endpoint class            | Notes                                                                              |
+|---------------------------|---------------------------|------------------------------------------------------------------------------------|
+| Claude Sonnet 4.5         | `claude-agent-sdk`        | Local Claude Code session against Anthropic's API                                  |
+| Google Gemma-4-31B-it     | SanoVelo (local vLLM)     | Port 8002, `--reasoning-parser gemma4`                                             |
+| IBM Granite-4.1-30B       | SanoVelo (local vLLM)     | Port 8003, `--reasoning-parser gemma4 --tool-call-parser granite4`                 |
+| Mistral Devstral-2-123B   | SanoVelo (local vLLM)     | Port 8004, `max_tokens=8192`                                                       |
+| Alibaba Qwen3.6-35B       | OpenAI-compatible HTTPS   | Cyfronet PLGrid Forge                                                              |
+| Z.ai GLM-4.7-Flash        | OpenAI-compatible HTTPS   | Cyfronet PLGrid Forge                                                              |
+| DeepSeek-V4-Pro           | OpenAI-compatible HTTPS   | OpenRouter → SiliconFlow                                                           |
+
+SanoVelo is the vLLM-based open-LLM inference cluster at Sano. PLGrid Forge is Cyfronet's OpenAI-compatible LLM endpoint.
+
+## Run commands
+
+```bash
+make sweep-k8                              # K=8 sweep, all 7 LLMs × 18 scenarios × 8 trials  (~7.5 h sequential)
+make show-grid-rate RID=<run-id>           # renders the per-(LLM, scenario) grid
+make show-headline RID=<run-id>            # renders the per-LLM headline counts
+make rescore RID=<run-id>                  # applies the parser-bug + deployment-artefact lifts
+```
+
+The `<run-id>` is the date-stamped directory name printed by `make sweep-k8` (e.g. `20260503T002305_k8`).
+
+## Test suite
+
+`make test` runs **203 unit tests** across the MCP server and benchmark harness. They cover every tool's REST shape, the federation-reset protocol, the oracles, the rescore lift logic, and the harness's tool-allowlist enforcement.
+
+The MCP conformance suite (`modelcontextprotocol/conformance` v0.1.16) reports **2 / 2 PASS** on the `dns-rebinding-protection` scenario after the M-13 transport hardening; rerun via `make conformance`.
+
+## Per-trial data layout
+
+The `artefacts/20260503T002305_k8/` directory in this replication package carries:
+
+- **126 `<llm>__<scenario>.jsonl`** files — per-(LLM, scenario) trial records, 8 trials each, **1008 total**
+- **126 `<llm>__<scenario>.rescored.jsonl`** files — same trial set, with parser-bug and deployment-artefact lift annotations
+- **`sweep-k8.log`** — full driver log
+- **`_per-step-logs/`** — 9 per-step logs (per-LLM K=8 + V4-Pro probe + final report)
+- **`REPORT_paper.md`** + **`REPORT_cyfronet.md`** — auto-generated headline summaries
+
+Every model failure cited in §5 of the paper resolves to a specific trial record in this directory. The JSONL schema is documented in [`../artefacts/20260503T002305_k8/README.md`](../artefacts/20260503T002305_k8/README.md).
