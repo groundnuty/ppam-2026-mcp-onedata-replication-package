@@ -1,0 +1,53 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+========================================================
+
+Copyright (c) 2026  the authors of "LLM-agentic access to a federated
+scientific data layer with Onedata" (PPAM 2026):
+
+  Michał Orzechowski, Renata G. Słota, Mikołaj Maślak, Łukasz Dutka,
+  Jacek Kitowski
+
+You are free to:
+
+  Share — copy and redistribute the material in any medium or format
+  Adapt — remix, transform, and build upon the material for any
+          purpose, even commercially.
+
+The licensor cannot revoke these freedoms as long as you follow the
+licence terms.
+
+Under the following terms:
+
+  Attribution — You must give appropriate credit, provide a link to
+  the licence, and indicate if changes were made. You may do so in
+  any reasonable manner, but not in any way that suggests the
+  licensor endorses you or your use.
+
+  No additional restrictions — You may not apply legal terms or
+  technological measures that legally restrict others from doing
+  anything the licence permits.
+
+The full licence text is available at:
+
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+Scope of this licence
+---------------------
+
+This licence applies to the textual content and per-trial data files
+in this repository (appendices, runbook, README files, JSONL artefacts,
+logs).
+
+It does NOT cover:
+
+  - The upstream MCP-server source code at the pinned commit
+    (`groundnuty/onedata-mcp` at `08e201b`), which is governed by
+    that repository's terms; see `code-pin/README.md`.
+  - Third-party trademarks (Anthropic, Mistral AI, Google DeepMind,
+    IBM, Alibaba, Z.ai, DeepSeek, Onedata, Cyfronet, IISAS, Sano).
+
+How to cite when redistributing
+-------------------------------
+
+When reusing the per-trial artefacts or the appendix text, please cite
+the paper and this replication package — see CITATION.cff.

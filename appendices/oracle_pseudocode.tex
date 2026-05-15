@@ -1,0 +1,39 @@
+\subsection*{Oracle pseudocode (canonical verifier archetypes)}
+
+\begin{lstlisting}[language=Python,caption={D1 (Discovery, format): list spaces.},label={lst:d1}]
+def verify_D1(answer: str) -> int:
+    expected = {"UC1","UC2","UC3","Public-Onedata-Datasets","ScientificMonitoring"}
+    parsed = set(re.findall(r'"?([A-Z][\w\-]+)"?', answer))
+    return int(expected.issubset(parsed))
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,caption={A2 (Multi-step access, static): tag every raw file.},label={lst:a2}]
+def verify_A2(harness, space="UC1") -> int:
+    files = harness.rest_listfiles(space, "/datasets/X", recursive=True)
+    return int(all(harness.rest_getmeta(f).get("reviewed") is False for f in files))
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,caption={P3 (Placement, dynamic): force >=2 EU replicas with == normalization.},label={lst:p3}]
+def verify_P3(harness, space, path="/checkpoint.pt", deadline_s=60) -> int:
+    rules = harness.rest_qos_summary(space, path)
+    norm = lambda e: e.replace("==","=")  # normalise Python-trained-LLM == operator confusion before string match
+    has_eu = any("geo=EU" in norm(r["expression"]) and r["replicasNum"]>=2
+                 for r in rules["requirements"])
+    if not has_eu: return 0
+    deadline = time.time() + deadline_s
+    while time.time() < deadline:
+        if all(r["status"]=="fulfilled" for r in rules["requirements"]):
+            return 1
+        time.sleep(5); rules = harness.rest_qos_summary(space, path)
+    return 0
+\end{lstlisting}
+
+\begin{lstlisting}[language=Python,caption={P4 (Placement, dynamic with pre-staged history): identify most-recent migration.},label={lst:p4}]
+def verify_P4(harness, answer, space="UC1") -> int:
+    transfers = harness.rest_list_transfers(space, type="migration")
+    expected = next(t for t in transfers if t["file"]=="/fixture/C/file3.bin")
+    parsed = re.search(r'transferId[\s:=]+([\w-]+)', answer)
+    return int(parsed is not None and parsed.group(1) == expected["transferId"])
+\end{lstlisting}
+
+% ============================================================

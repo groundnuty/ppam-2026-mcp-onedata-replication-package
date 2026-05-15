@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+title: >-
+  Replication package for "LLM-agentic access to a federated scientific
+  data layer with Onedata" (PPAM 2026)
+message: >-
+  If you reuse this package, please cite both the paper (preferred-citation
+  below) and this repository.
+type: dataset
+authors:
+  - family-names: Orzechowski
+    given-names: Michał
+    orcid: 'https://orcid.org/0000-0002-8558-1283'
+    affiliation: AGH University of Krakow, Poland; ACK Cyfronet AGH, Krakow, Poland
+  - family-names: Słota
+    given-names: Renata G.
+    orcid: 'https://orcid.org/0000-0001-7424-9317'
+    affiliation: AGH University of Krakow, Poland
+  - family-names: Maślak
+    given-names: Mikołaj
+    affiliation: AGH University of Krakow, Poland
+  - family-names: Dutka
+    given-names: Łukasz
+    orcid: 'https://orcid.org/0000-0002-8781-866X'
+    affiliation: ACK Cyfronet AGH, Krakow, Poland
+  - family-names: Kitowski
+    given-names: Jacek
+    orcid: 'https://orcid.org/0000-0003-3902-8310'
+    affiliation: AGH University of Krakow, Poland; ACK Cyfronet AGH, Krakow, Poland
+repository-code: >-
+  https://github.com/groundnuty/ppam-2026-mcp-onedata-replication-package
+url: >-
+  https://github.com/groundnuty/ppam-2026-mcp-onedata-replication-package
+abstract: >-
+  Per-trial audit-trail, appendices, and reproducibility runbook for the
+  PPAM 2026 paper "LLM-agentic access to a federated scientific data
+  layer with Onedata". Contains 1008 trial records from the K=8 headline
+  sweep (7 LLMs x 18 scenarios x 8 trials), with as-measured and
+  post-clean (rescored + deployment-lifted) oracle outcomes; the seven
+  text appendices the PPAM page budget required cutting (server-design
+  taxonomy, methodology detail, threats catalogue, scenario verbatim
+  briefs, stochasticity decomposition, oracle pseudocode, positioning
+  tables); and a reproducibility runbook. The MCP server, harness, and
+  rescore tooling are pinned at groundnuty/onedata-mcp@ppam2026/14-tools
+  at commit 08e201b.
+keywords:
+  - Model Context Protocol
+  - LLM agents
+  - federated scientific data
+  - Onedata
+  - tool curation
+  - execution-based oracle
+  - replication package
+license: CC-BY-4.0
+date-released: 2026-05-16
+preferred-citation:
+  type: conference-paper
+  title: >-
+    LLM-agentic access to a federated scientific data layer with Onedata
+  authors:
+    - family-names: Orzechowski
+      given-names: Michał
+      orcid: 'https://orcid.org/0000-0002-8558-1283'
+    - family-names: Słota
+      given-names: Renata G.
+      orcid: 'https://orcid.org/0000-0001-7424-9317'
+    - family-names: Maślak
+      given-names: Mikołaj
+    - family-names: Dutka
+      given-names: Łukasz
+      orcid: 'https://orcid.org/0000-0002-8781-866X'
+    - family-names: Kitowski
+      given-names: Jacek
+      orcid: 'https://orcid.org/0000-0003-3902-8310'
+  collection-title: >-
+    Proceedings of the 15th International Conference on Parallel Processing
+    and Applied Mathematics (PPAM 2026)
+  year: 2026
