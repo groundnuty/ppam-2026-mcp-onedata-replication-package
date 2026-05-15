@@ -78,8 +78,8 @@ The rescore script applies two non-destructive lift passes — **never demoting*
 | `rescore_version` | str | Lift-protocol tag (`"2026-05-03-helpers-v2"` for this run) |
 | `rescore_changed` | bool | `True` iff `outcome_v2 != outcome_original` |
 | `rescore_demotion_rejected` | bool | `True` iff the rescore would have demoted `PASS → FAIL` and was refused |
-| `lift_kind` | str/null | `"parser_bug"`, `"deployment_l3_granite"`, or `null` if no lift was applied |
-| `failure_category` | str/null | Post-clean classification for unlifted failures: `"model"`, `"parser"`, `"deployment_l3"`, or `null` for passing trials |
+| `lift_kind` | str/null | `"parser-bug"`, `"deployment-artefact"`, or `null` if no lift was applied |
+| `failure_category` | str/null | Post-clean classification for unlifted failures: `"model"`, `"deployment-L3-granite-tool-call"`, or `null` for passing trials and lifted trials |
 
 ### Rescore protocol summary
 

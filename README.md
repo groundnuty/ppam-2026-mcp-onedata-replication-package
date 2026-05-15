@@ -83,12 +83,12 @@ jq '{trial_ix, outcome_v2, oracle_diagnosis_v2}' \
    artefacts/20260503T002305_k8/granite-4.1-30b__P1.rescored.jsonl
 
 # Trials lifted by the parser-bug rescore
-jq -s 'map(select(.lift_kind=="parser_bug")) | length' \
+jq -s 'map(select(.lift_kind=="parser-bug")) | length' \
    artefacts/20260503T002305_k8/*.rescored.jsonl
 # → 20
 
 # Trials lifted by the deployment-artefact rescue
-jq -s 'map(select(.lift_kind=="deployment_l3_granite")) | length' \
+jq -s 'map(select(.lift_kind=="deployment-artefact")) | length' \
    artefacts/20260503T002305_k8/*.rescored.jsonl
 # → 10
 ```
