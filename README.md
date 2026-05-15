@@ -10,6 +10,24 @@ It contains everything a reader needs to (a) audit any cited empirical claim aga
 
 The **server code, benchmark harness, oracles, federation-reset protocol, and rescore tooling** live in a separate repository pinned at a specific commit; this repository contains the **artefacts that commit produced**, the **appendices the paper had to cut** to fit the PPAM 15-page budget, and the **reproducibility runbook** that ties the two together.
 
+## Mapping from paper citations (`supp.~§X`)
+
+The PPAM paper cites this package using the compact form `supp.~§X` (for example, "see supp.~§A for the verbatim briefs"). The mapping is:
+
+| Citation form | Section name                              | File                                                                                                  |
+|:-------------:|-------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `supp.~§A`    | Scenarios — 18 verbatim briefs            | [`appendices/scenarios.md`](appendices/scenarios.md)                                                  |
+| `supp.~§B`    | Methodology appendix                      | [`appendices/methodology_appendix.md`](appendices/methodology_appendix.md)                            |
+| `supp.~§C`    | Server-design findings (M-1 .. M-13)      | [`appendices/server_design_findings.md`](appendices/server_design_findings.md)                        |
+| `supp.~§D`    | Threats to validity                       | [`appendices/threats_appendix.md`](appendices/threats_appendix.md)                                    |
+| `supp.~§E`    | Stochasticity and tool-removal            | [`appendices/stochasticity_appendix.md`](appendices/stochasticity_appendix.md)                        |
+| `supp.~§F`    | Positioning tables (FGCS-deferred)        | [`appendices/positioning_tables.md`](appendices/positioning_tables.md)                                |
+| `supp.~§G`    | Oracle pseudocode                         | [`appendices/oracle_pseudocode.tex`](appendices/oracle_pseudocode.tex)                                |
+| `supp.~§R`    | Reproducibility runbook                   | [`runbook/RUNBOOK.md`](runbook/RUNBOOK.md)                                                            |
+| `supp.~§K`    | Code pin (commit producing the artefacts) | [`code-pin/README.md`](code-pin/README.md)                                                            |
+
+The per-trial audit-trail (1008 trial records) lives at [`artefacts/20260503T002305_k8/`](artefacts/20260503T002305_k8/) and is cited from the paper as "see supp." (no section letter — the whole JSONL set is the artefact).
+
 ## Repository structure
 
 ```
